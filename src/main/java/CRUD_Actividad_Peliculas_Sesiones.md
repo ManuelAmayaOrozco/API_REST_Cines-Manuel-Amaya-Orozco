@@ -1,5 +1,5 @@
 
-# Actividad: Implementación de un CRUD para "Películas" y "Sesiones" con uso de DTO
+# Actividad: Implementación de un CRUD para "Películas" y "Sesiones" con uso de com.es.diecines.DTO
 
 ## Objetivo:
 Desarrollar una API REST en Spring Boot que permita realizar operaciones CRUD sobre las entidades **Películas** y **Sesiones**. Los estudiantes deben aprender a estructurar y organizar el código siguiendo las buenas prácticas, utilizando DTOs para la transferencia de datos.
@@ -24,7 +24,7 @@ Desarrollar una API REST en Spring Boot que permita realizar operaciones CRUD so
     - Consultar las sesiones del día de hoy.
 
 3. **Práctica con DTOs**:
-    - Crear clases DTO para **Películas** y **Sesiones**.
+    - Crear clases com.es.diecines.DTO para **Películas** y **Sesiones**.
     - Mapear las entidades hacia DTOs y viceversa en los controladores.
 
 4. **Persistencia**:
@@ -127,7 +127,7 @@ public interface SesionRepository extends JpaRepository<Sesion, Long> {}
 ---
 
 ### 2.4. Crear DTOs
-**DTO para Película**:
+**com.es.diecines.DTO para Película**:
 ```java
 public class PeliculaDTO {
     private Long id;
@@ -142,7 +142,7 @@ public class PeliculaDTO {
 }
 ```
 
-**DTO para Sesión**:
+**com.es.diecines.DTO para Sesión**:
 ```java
 public class SesionDTO {
     private Long id;
@@ -158,7 +158,7 @@ public class SesionDTO {
 Implementar servicios que manejan la lógica de negocio, incluyendo la conversión entre entidades y DTOs.
 
 ```java
-@Service
+@com.es.diecines.Service
 public class PeliculaService {
 
     private final PeliculaRepository peliculaRepository;
@@ -275,7 +275,7 @@ public class PeliculaController {
    - Crear los servicios y controladores para manejar las operaciones CRUD.
 
 4. **Usar DTOs:** 
-   - Crear clases DTO y mapear las entidades hacia DTOs y viceversa en los servicios.
+   - Crear clases com.es.diecines.DTO y mapear las entidades hacia DTOs y viceversa en los servicios.
 
 5. **Pruebas:** 
    - Probar los endpoints con Postman o Swagger.
