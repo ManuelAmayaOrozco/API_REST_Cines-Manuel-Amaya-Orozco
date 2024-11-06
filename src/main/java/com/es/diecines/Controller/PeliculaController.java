@@ -4,6 +4,8 @@ import com.es.diecines.DTO.PeliculaDTO;
 import com.es.diecines.Service.PeliculaService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/peliculas")
 public class PeliculaController {
@@ -36,5 +38,10 @@ public class PeliculaController {
         }
     }
 
-    // Implementar otros endpoints...
+    @GetMapping
+    public List<PeliculaDTO> getAll() {
+
+        return peliculaService.getAll();
+
+    }
 }

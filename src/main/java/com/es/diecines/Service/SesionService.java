@@ -18,11 +18,9 @@ public class SesionService {
     }
 
     public SesionDTO create(SesionDTO sesionDTO) {
+        Sesion sesion = mapToSesion(sesionDTO);
 
-        Sesion sesion = new Sesion();
-        sesion.setPelicula(peliculaRepository.getReferenceById(sesionDTO.getMovieId()));
-        sesion.setRoomId(sesionDTO.getRoomId());
-        sesion.setDate(sesionDTO.getDate());
+        sesion = sesionRepository.save(sesion);
 
         return mapToDTO(sesion);
     }
@@ -34,6 +32,15 @@ public class SesionService {
         sesionDTO.setRoomId(sesion.getRoomId());
         sesionDTO.setDate(sesion.getDate());
         return sesionDTO;
+    }
+
+    private Sesion mapToSesion(SesionDTO sesionDTO) {
+        Sesion sesion = new Sesion();
+        sesion.setPelicula(peliculaRepository.getReferenceById(sesionDTO.getMovieId()));
+        sesion.setRoomId(sesionDTO.getRoomId());
+        sesion.setDate(sesionDTO.getDate());
+        return sesion;
+
     }
 
 }

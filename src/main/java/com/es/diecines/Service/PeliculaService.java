@@ -5,6 +5,9 @@ import com.es.diecines.Model.Pelicula;
 import com.es.diecines.Repository.PeliculaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PeliculaService {
 
@@ -16,6 +19,8 @@ public class PeliculaService {
 
     public PeliculaDTO create(PeliculaDTO peliculaDTO) {
         Pelicula pelicula = mapToPelicula(peliculaDTO);
+
+        pelicula = peliculaRepository.save(pelicula);
 
         return mapToDTO(pelicula);
     }
@@ -34,6 +39,21 @@ public class PeliculaService {
         Pelicula p = peliculaRepository.findById(idL).orElse(null);
 
         return mapToDTO(p);
+    }
+
+    public List<PeliculaDTO> getAll() {
+
+        List<PeliculaDTO> listaDeDTOs = new ArrayList<>();
+
+        List<Pelicula> listaPel = peliculaRepository.findAll();
+
+        for (Pelicula p: listaPel) {
+
+            listaDeDTOs.add(mapToDTO(p));
+
+        }
+
+        return listaDeDTOs;
     }
 
     private PeliculaDTO mapToDTO(Pelicula pelicula) {
@@ -60,7 +80,6 @@ public class PeliculaService {
         pelicula.setScreenshot(peliculaDTO.getScreenshot());
         pelicula.setSynopsis(peliculaDTO.getSynopsis());
         pelicula.setRating(peliculaDTO.getRating());
-        pelicula = peliculaRepository.save(pelicula);
         return pelicula;
     }
 
