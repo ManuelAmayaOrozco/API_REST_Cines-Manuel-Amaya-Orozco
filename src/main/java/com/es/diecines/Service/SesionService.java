@@ -8,6 +8,7 @@ import com.es.diecines.Repository.PeliculaRepository;
 import com.es.diecines.Repository.SesionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,26 @@ public class SesionService {
         for (Sesion s: listaSes) {
 
             listaDeDTOs.add(mapToDTO(s));
+
+        }
+
+        return listaDeDTOs;
+
+    }
+
+    public List<SesionDTO> getHoy() {
+
+        List<SesionDTO> listaDeDTOs = new ArrayList<>();
+
+        List<Sesion> listaSes = sesionRepository.findAll();
+
+        for (Sesion s: listaSes) {
+
+            if (s.getDate() == LocalDate.now()) {
+
+                listaDeDTOs.add(mapToDTO(s));
+
+            }
 
         }
 
@@ -72,6 +93,31 @@ public class SesionService {
             return mapToDTO(newS);
         }
 
+    }
+
+    public SesionDTO delete(String id) {
+
+        // Parsear el id a Long
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id");
+            return null;
+        }
+
+        // Compruebo que la sesion existe en la BDD
+        Sesion s = sesionRepository.findById(idL).orElse(null);
+
+        if (s == null) {
+            return null;
+        } else {
+            SesionDTO sesionDTO = mapToDTO(s);
+
+            sesionRepository.delete(s);
+
+            return sesionDTO;
+        }
     }
 
     private SesionDTO mapToDTO(Sesion sesion) {

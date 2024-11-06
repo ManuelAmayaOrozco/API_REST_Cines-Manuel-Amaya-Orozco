@@ -31,6 +31,13 @@ public class SesionController {
 
     }
 
+    @GetMapping("/hoy")
+    public List<SesionDTO> getHoy() {
+
+        return sesionService.getHoy();
+
+    }
+
     @PutMapping("/{id}")
     public SesionDTO update(
             @RequestBody SesionDTO sesionDTO,
@@ -40,6 +47,23 @@ public class SesionController {
         if (id == null || id.isEmpty()) return null;
 
         SesionDTO s = sesionService.update(id, sesionDTO);
+
+        if (s == null) {
+            return null;
+        } else {
+            return s;
+        }
+
+    }
+
+    @DeleteMapping("/{id}")
+    public SesionDTO delete(
+            @PathVariable String id
+    ) {
+
+        if (id == null || id.isEmpty()) return null;
+
+        SesionDTO s = sesionService.delete(id);
 
         if (s == null) {
             return null;
