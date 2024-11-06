@@ -31,5 +31,22 @@ public class SesionController {
 
     }
 
+    @PutMapping("/{id}")
+    public SesionDTO update(
+            @RequestBody SesionDTO sesionDTO,
+            @PathVariable String id
+    ) {
+
+        if (id == null || id.isEmpty()) return null;
+
+        SesionDTO s = sesionService.update(id, sesionDTO);
+
+        if (s == null) {
+            return null;
+        } else {
+            return s;
+        }
+
+    }
 
 }

@@ -46,6 +46,34 @@ public class SesionService {
         return mapToDTO(sesion);
     }
 
+    public SesionDTO update(String id, SesionDTO sesionDTO) {
+
+        // Parsear el id a Long
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id");
+            return null;
+        }
+
+        // Compruebo que la sesion existe en la BDD
+        Sesion s = sesionRepository.findById(idL).orElse(null);
+
+        if (s == null) {
+            return null;
+        } else {
+            Sesion newS = mapToSesion(sesionDTO);
+
+            newS.setId(s.getId());
+
+            sesionRepository.save(newS);
+
+            return mapToDTO(newS);
+        }
+
+    }
+
     private SesionDTO mapToDTO(Sesion sesion) {
         SesionDTO sesionDTO = new SesionDTO();
         sesionDTO.setId(sesion.getId());
