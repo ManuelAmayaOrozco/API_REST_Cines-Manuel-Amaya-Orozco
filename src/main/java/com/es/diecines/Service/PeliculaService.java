@@ -56,6 +56,34 @@ public class PeliculaService {
         return listaDeDTOs;
     }
 
+    public PeliculaDTO update(String id, PeliculaDTO peliculaDTO) {
+
+        // Parsear el id a Long
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id");
+            return null;
+        }
+
+        // Compruebo que la pelicula existe en la BDD
+        Pelicula p = peliculaRepository.findById(idL).orElse(null);
+
+        if (p == null) {
+            return null;
+        } else {
+            Pelicula newP = mapToPelicula(peliculaDTO);
+
+            newP.setId(p.getId());
+
+            peliculaRepository.save(newP);
+
+            return mapToDTO(newP);
+        }
+
+    }
+
     private PeliculaDTO mapToDTO(Pelicula pelicula) {
         PeliculaDTO peliculaDTO = new PeliculaDTO();
         peliculaDTO.setId(pelicula.getId());

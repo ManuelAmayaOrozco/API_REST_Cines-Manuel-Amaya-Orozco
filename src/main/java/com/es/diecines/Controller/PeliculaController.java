@@ -44,4 +44,22 @@ public class PeliculaController {
         return peliculaService.getAll();
 
     }
+
+    @PutMapping("/{id}")
+    public PeliculaDTO update(
+            @RequestBody PeliculaDTO peliculaDTO,
+            @PathVariable String id
+    ) {
+
+        if (id == null || id.isEmpty()) return null;
+
+        PeliculaDTO p = peliculaService.update(id, peliculaDTO);
+
+        if (p == null) {
+            return null;
+        } else {
+            return p;
+        }
+
+    }
 }
