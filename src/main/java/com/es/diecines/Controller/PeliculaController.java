@@ -62,4 +62,21 @@ public class PeliculaController {
         }
 
     }
+
+    @DeleteMapping("/{id}")
+    public PeliculaDTO delete(
+            @PathVariable String id
+    ) {
+
+        if (id == null || id.isEmpty()) return null;
+
+        PeliculaDTO p = peliculaService.delete(id);
+
+        if (p == null) {
+            return null;
+        } else {
+            return p;
+        }
+
+    }
 }

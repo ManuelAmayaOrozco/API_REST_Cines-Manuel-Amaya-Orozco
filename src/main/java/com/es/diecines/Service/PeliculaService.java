@@ -2,7 +2,9 @@ package com.es.diecines.Service;
 
 import com.es.diecines.DTO.PeliculaDTO;
 import com.es.diecines.Model.Pelicula;
+import com.es.diecines.Model.Sesion;
 import com.es.diecines.Repository.PeliculaRepository;
+import com.es.diecines.Repository.SesionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.List;
 public class PeliculaService {
 
     private final PeliculaRepository peliculaRepository;
+    private final SesionRepository sesionRepository;
 
-    public PeliculaService(PeliculaRepository peliculaRepository) {
+    public PeliculaService(PeliculaRepository peliculaRepository, SesionRepository sesionRepository) {
         this.peliculaRepository = peliculaRepository;
+        this.sesionRepository = sesionRepository;
     }
 
     public PeliculaDTO create(PeliculaDTO peliculaDTO) {
@@ -81,7 +85,43 @@ public class PeliculaService {
 
             return mapToDTO(newP);
         }
+    }
 
+    public PeliculaDTO delete(String id) {
+
+        // Parsear el id a Long
+        Long idL = 0L;
+        try {
+            idL = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id");
+            return null;
+        }
+
+        // Compruebo que la pelicula existe en la BDD
+        Pelicula p = peliculaRepository.findById(idL).orElse(null);
+
+        if (p == null) {
+            return null;
+        } else {
+            List<Sesion> sesiones = sesionRepository.findAll();
+
+            for (Sesion s: sesiones) {
+
+                if (s.getPelicula().getId() == idL) {
+
+                    sesionRepository.delete(s);
+
+                }
+
+            }
+
+            PeliculaDTO peliculaDTO = mapToDTO(p);
+
+            peliculaRepository.delete(p);
+
+            return peliculaDTO;
+        }
     }
 
     private PeliculaDTO mapToDTO(Pelicula pelicula) {
