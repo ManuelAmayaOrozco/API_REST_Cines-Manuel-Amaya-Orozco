@@ -45,6 +45,21 @@ public class PeliculaController {
 
     }
 
+    @GetMapping("/rating/{minRating}")
+    public List<PeliculaDTO> getByMinRating(
+            @PathVariable String minRating
+    ) {
+        if (minRating == null || minRating.isEmpty()) return null;
+
+        List<PeliculaDTO> p = peliculaService.getByMinRating(minRating);
+
+        if (p == null) {
+            return null;
+        } else {
+            return p;
+        }
+    }
+
     @PutMapping("/{id}")
     public PeliculaDTO update(
             @RequestBody PeliculaDTO peliculaDTO,

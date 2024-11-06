@@ -60,6 +60,34 @@ public class PeliculaService {
         return listaDeDTOs;
     }
 
+    public List<PeliculaDTO> getByMinRating(String minRating) {
+
+        // Parsear el minRating a Double
+        Double minRatingD = 0.0;
+        try {
+            minRatingD = Double.parseDouble(minRating);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al parsear el id");
+            return null;
+        }
+
+        List<PeliculaDTO> listaDeDTOs = new ArrayList<>();
+
+        List<Pelicula> listaPel = peliculaRepository.findAll();
+
+        for (Pelicula p: listaPel) {
+
+            if (p.getRating() > minRatingD) {
+
+                listaDeDTOs.add(mapToDTO(p));
+
+            }
+
+        }
+
+        return listaDeDTOs;
+    }
+
     public PeliculaDTO update(String id, PeliculaDTO peliculaDTO) {
 
         // Parsear el id a Long
