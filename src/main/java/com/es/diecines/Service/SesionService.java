@@ -1,10 +1,15 @@
 package com.es.diecines.Service;
 
+import com.es.diecines.DTO.PeliculaDTO;
 import com.es.diecines.DTO.SesionDTO;
+import com.es.diecines.Model.Pelicula;
 import com.es.diecines.Model.Sesion;
 import com.es.diecines.Repository.PeliculaRepository;
 import com.es.diecines.Repository.SesionRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SesionService {
@@ -15,6 +20,22 @@ public class SesionService {
     public SesionService(SesionRepository sesionRepository, PeliculaRepository peliculaRepository) {
         this.sesionRepository = sesionRepository;
         this.peliculaRepository = peliculaRepository;
+    }
+
+    public List<SesionDTO> getAll() {
+
+        List<SesionDTO> listaDeDTOs = new ArrayList<>();
+
+        List<Sesion> listaSes = sesionRepository.findAll();
+
+        for (Sesion s: listaSes) {
+
+            listaDeDTOs.add(mapToDTO(s));
+
+        }
+
+        return listaDeDTOs;
+
     }
 
     public SesionDTO create(SesionDTO sesionDTO) {

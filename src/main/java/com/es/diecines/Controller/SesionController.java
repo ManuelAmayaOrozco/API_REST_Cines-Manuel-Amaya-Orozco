@@ -1,11 +1,11 @@
 package com.es.diecines.Controller;
 
+import com.es.diecines.DTO.PeliculaDTO;
 import com.es.diecines.DTO.SesionDTO;
 import com.es.diecines.Service.SesionService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/sesiones")
@@ -18,11 +18,18 @@ public class SesionController {
     }
 
     @PostMapping
-    public SesionDTO createSesion(
+    public SesionDTO create(
             @RequestBody SesionDTO sesionDTO
     ) {
         return sesionService.create(sesionDTO);
     }
 
-    // Implementar otros endpoints...
+    @GetMapping
+    public List<SesionDTO> getAll() {
+
+        return sesionService.getAll();
+
+    }
+
+
 }
