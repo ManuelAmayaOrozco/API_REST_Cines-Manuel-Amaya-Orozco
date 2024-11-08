@@ -42,7 +42,12 @@ public class PeliculaService {
 
         Pelicula p = peliculaRepository.findById(idL).orElse(null);
 
-        return mapToDTO(p);
+        if (p == null) {
+            return null;
+        } else {
+            return mapToDTO(p);
+        }
+
     }
 
     public List<PeliculaDTO> getAll() {

@@ -1,7 +1,12 @@
 package com.es.diecines.Controller;
 
 import com.es.diecines.DTO.PeliculaDTO;
+import com.es.diecines.Error.BaseDeDatosException;
+import com.es.diecines.Error.ErrorGenerico;
 import com.es.diecines.Service.PeliculaService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,40 +29,101 @@ public class PeliculaController {
     }
 
     @GetMapping("/{id}")
-    public PeliculaDTO getById(
+    public ResponseEntity<?> getById(
             @PathVariable String id
     ) {
-        if (id == null || id.isEmpty()) return null;
+        try {
+            // 1 Comprobar que el id no viene vacío
+            if (id == null || id.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        PeliculaDTO p = peliculaService.getById(id);
+            // 2 Si no viene vacio, llamo al Service
+            PeliculaDTO p = peliculaService.getById(id);
 
-        if (p == null) {
-            return null;
-        } else {
-            return p;
+            // 3 Compruebo la validez de p para devolver una respuesta
+            if(p == null) {
+                ResponseEntity<ErrorGenerico> respuesta =
+                        new ResponseEntity<>(
+                                new ErrorGenerico("Pelicula no encontrada", "localhost:8080/peliculas/{id}"),
+                                HttpStatus.NOT_FOUND);
+                return respuesta;
+            } else {
+                ResponseEntity<PeliculaDTO> respuesta = new ResponseEntity<PeliculaDTO>(
+                        p, HttpStatus.OK
+                );
+                return respuesta;
+            }
+        } catch (NumberFormatException e) {
+            ErrorGenerico error = new ErrorGenerico(
+                    e.getMessage(),
+                    "localhost:8080/peliculas/"+id
+            );
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        } catch (BaseDeDatosException e) {
+            ErrorGenerico error = new ErrorGenerico(
+                    e.getMessage(),
+                    "localhost:8080/peliculas/"+id
+            );
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping
-    public List<PeliculaDTO> getAll() {
+    public ResponseEntity<?> getAll() {
 
-        return peliculaService.getAll();
+        List<PeliculaDTO> p = peliculaService.getAll();
+
+        if(p == null) {
+            ResponseEntity<ErrorGenerico> respuesta =
+                    new ResponseEntity<>(
+                            new ErrorGenerico("No hay películas", "localhost:8080/peliculas/"),
+                            HttpStatus.NOT_FOUND);
+            return respuesta;
+        } else {
+            ResponseEntity<List<PeliculaDTO>> respuesta = new ResponseEntity<List<PeliculaDTO>>(
+                    p, HttpStatus.OK
+            );
+            return respuesta;
+        }
 
     }
 
     @GetMapping("/rating/{minRating}")
-    public List<PeliculaDTO> getByMinRating(
+    public ResponseEntity<?> getByMinRating(
             @PathVariable String minRating
     ) {
-        if (minRating == null || minRating.isEmpty()) return null;
+        try {
 
-        List<PeliculaDTO> p = peliculaService.getByMinRating(minRating);
+            if (minRating == null || minRating.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if (p == null) {
-            return null;
-        } else {
-            return p;
+            List<PeliculaDTO> p = peliculaService.getByMinRating(minRating);
+
+            if(p == null) {
+                ResponseEntity<ErrorGenerico> respuesta =
+                        new ResponseEntity<>(
+                                new ErrorGenerico("Películas no encontradas", "localhost:8080/peliculas/rating/{minRating}"),
+                                HttpStatus.NOT_FOUND);
+                return respuesta;
+            } else {
+                ResponseEntity<List<PeliculaDTO>> respuesta = new ResponseEntity<List<PeliculaDTO>>(
+                        p, HttpStatus.OK
+                );
+                return respuesta;
+            }
+
+        } catch (NumberFormatException e) {
+            ErrorGenerico error = new ErrorGenerico(
+                    e.getMessage(),
+                    "localhost:8080/peliculas/rating/"+minRating
+            );
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        } catch (BaseDeDatosException e) {
+            ErrorGenerico error = new ErrorGenerico(
+                    e.getMessage(),
+                    "localhost:8080/peliculas/rating/"+minRating
+            );
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @PutMapping("/{id}")
